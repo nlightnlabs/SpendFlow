@@ -2,10 +2,17 @@ import React,{useState, useEffect} from 'react'
 import axios from 'axios'
 function App() {
 
+  const redirectToFreeAgent = ()=>{
+    window.location.assign("https://freeagent.network")
+  }
+
+  useEffect(()=>{
+    redirectToFreeAgent()
+  },[])
 
   return (
     <div className="App">
-      {window.location.assign("https://freeagent.network")}
+      
     </div>
   );
 }
