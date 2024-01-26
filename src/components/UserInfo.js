@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext, useRef} from 'react'
 import { Context } from "./Context.js"
-import axios from './axios.js'
+import {dbUrl} from './apis/axios.js'
 import "bootstrap/dist/css/bootstrap.min.css"
 import 'animate.css'
 
@@ -45,7 +45,7 @@ const UserInfo = () => {
 
   const [businessUnits, setBusinessUnits] = useState([])
 
-  let user_info ={}
+  let user_info = {...appData.user_info}
 
   const handleChange = (e)=>{
       let {name, value} = e.target
@@ -92,13 +92,13 @@ const UserInfo = () => {
     e.preventDefault()
     const form = e.target
 
-    console.log(appData)
-
     if(e.nativeEvent.submitter.name==="backButton"){
         setFormClassList("form-group")
         let pageListCopy = pageList
+        console.log(pageList)
         let thisPage = pageListCopy.splice(-1)
         let nextPage = pageListCopy[pageListCopy.length-1]
+        console.log(nextPage)
         setPageList(pageListCopy)
         setPage(pages.filter(x=>x.name===nextPage)[0])
         setPageName(nextPage)
@@ -129,7 +129,7 @@ const UserInfo = () => {
               // 'Authorization': 'Bearer yourAccessToken',
             }
             try{
-              const sendUserDatatoDb = await axios.post('/db/addUser',{params}, {headers})
+              const sendUserDatatoDb = await dbUrl.post('/db/addUser',{params}, {headers})
               const response = await sendUserDatatoDb.data
               console.log(response)
               if(response =="exists"){
@@ -153,13 +153,10 @@ const UserInfo = () => {
 }
 
 const getBusinessUnits = async ()=>{
-    const response = await axios.get("/db/table/business_units")
-    const data = await response.data
-
-    console.log(data)
-
+    const response = await dbUrl.get("/db/table/business_units")
+    
     let businessUnitSet = new Set()
-      await data.forEach(item=>{
+      response.data.data.forEach(item=>{
         businessUnitSet.add(item.name)
       })
       let businessUnitList = [...businessUnitSet]
@@ -171,6 +168,7 @@ const getBusinessUnits = async ()=>{
     console.log(pageList)
     getBusinessUnits()
   },[])
+
 
   const [pageClass, setPageClass] = useState("container mt-5 animate__animated animate__fadeIn animate__duration-0.5s")
   

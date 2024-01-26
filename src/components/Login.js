@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext, useRef} from 'react'
 import { Context } from "./Context.js"
-import axios from './axios.js'
+import axios from './apis/axios.js'
 import "bootstrap/dist/css/bootstrap.min.css"
 import 'animate.css'
 
@@ -17,23 +17,27 @@ const Login = () => {
     setPages,
     pageName,
     setPageName,
+    requestType,
+    setRequestType,
     appData,
     setAppData,
+    attachments,
+    setAttachments,
     pageList,
     setPageList,
-    initialFormData,
-    setInitialFormData
+    requestTypes,
+    setRequestTypes
   } = useContext(Context)
 
   useEffect(()=>{
-    console.log(appData)
-    setPage(pages.filter(x=>x.name===pageName)[0])
-    console.log(page)
-    setPageList([...pageList,pageName])
-    console.log(pageList)
+    setAppData({})
+    setPageName("Log In")
+    setPage(pages.filter(x=>x.name==="Log In")[0])
+    setPageList(['Log In'])
 },[])
 
   let formData = {}
+
   const [formClassList, setFormClassList] = useState("form-group")
   const formRef = useRef()
   const [logInErrorMsg, setLogInErrorMsg] = useState("")
@@ -48,7 +52,6 @@ const Login = () => {
 
       let new_data = {[name]: value}
       let formData = {...appData[`${page.data}`],...new_data}
-      console.log({...appData,[`${page.data}`]:formData})
       setAppData({...appData,[`${page.data}`]:formData})
   }
 
@@ -57,9 +60,15 @@ const Login = () => {
     e.preventDefault()
     const form = e.target
 
-
     const validateUser = async(req, res)=>{
-        console.log(appData)
+      if(Object.keys(appData)==0){
+        let formData = {...appData[`${page.data}`],...{}}
+        setAppData({...appData,[`${page.data}`]:formData})
+        setLogInErrorMsg(`${String.fromCharCode(10060)} invalid user information.`)
+        setLogInClassName("text-danger mt-0 mb-3 animate__animated animate__fadeIn ")
+      }
+      else{
+        // console.log(appData)
         const params = {
             email: appData.user_info.email,
             pwd: appData.user_info.pwd
@@ -76,6 +85,8 @@ const Login = () => {
         }catch(error){
             console.log(error)
         }
+      }
+        
     }
 
     const getUserInfo = async (req, res)=>{
@@ -99,6 +110,13 @@ const Login = () => {
     if(e.nativeEvent.submitter.name==="sign_up"){
       setFormClassList("form-group")
       let nextPage = "User Info"
+      setPageList([...pageList,nextPage])
+      setPage(pages.filter(x=>x.name===nextPage)[0])
+      setPageName(nextPage)
+    }else if(e.nativeEvent.submitter.name==="forgot_password"){
+      setFormClassList("form-group")
+      let nextPage = "Forgot Password"
+      setPageList([...pageList,nextPage])
       setPage(pages.filter(x=>x.name===nextPage)[0])
       setPageName(nextPage)
     }else{
@@ -123,9 +141,6 @@ const Login = () => {
     }
 }
 
-
-
-
   const [pageClass, setPageClass] = useState("container mt-5 animate__animated animate__fadeIn animate__duration-0.5s")
   
   return (
@@ -143,7 +158,7 @@ const Login = () => {
             
             <div className="form-floating mb-3">
               <input id = "email" name= "email" type="email" className="form-control form-control text-primary" onChange={handleChange} placeholder="Username"></input>
-              <label htmlFor="username" className="form-label text-body-tertiary small">Email</label>
+              <label htmlFor="email" className="form-label text-body-tertiary small">Email</label>
             </div>
 
             <div className="form-floating mb-3">
@@ -156,7 +171,8 @@ const Login = () => {
               <div className="d-flex justify-content-center">
                 <div className="d-flex flex-column">
                     <button id = "login_in" name="log_in"  className="btn btn-primary" data-bs-toggle="button" type="submit">Log In</button>
-                    <button id = "sign_up" name="sign_up"  className="btn btn-light" data-bs-toggle="button" type="submit">Sign Up</button>
+                    <button id = "sign_up" name="sign_up"  className="btn text-secondary" data-bs-toggle="button" type="submit">Sign Up</button>
+                    <button id = "forgot_password" name="forgot_password"  className="btn text-secondary" data-bs-toggle="button" type="submit">Forgot Password</button>
                 </div>
               </div>
             </div>
