@@ -262,7 +262,7 @@ export const askGPT = async (req)=>{
   }
 
   try{
-    const result = await dbUrl.post("/gpt",{params})
+    const result = await dbUrl.post("/gpt/ask",{params})
     return (result)
   }catch(error){
     // console.log(error)
@@ -277,7 +277,7 @@ export const generateImage = async (req)=>{
   }
 
   try{
-    const result = await dbUrl.post("/gptImage",{params})
+    const result = await dbUrl.post("/gpt/image",{params})
     // console.log(result)
     return (result.data[0].url)
   }catch(error){
@@ -298,7 +298,7 @@ export const scanInvoice = async ({args})=>{
   }
 
   try{
-    const result = await dbUrl.post("/gpt",{params})
+    const result = await dbUrl.post("/gpt/ask",{params})
     console.log(JSON.parse(result.data))
     return (JSON.parse(result.data))
   }catch(error){
