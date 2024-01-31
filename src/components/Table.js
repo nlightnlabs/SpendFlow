@@ -7,6 +7,7 @@ import RecordDetails from './RecordDetails.js';
 import { getTable } from './apis/axios.js';
 import {toProperCase} from './functions/formatValue.js'
 import { UTCToLocalTime } from './functions/time.js';
+import Draggable from 'react-draggable';
 
 const Table = (props) => {
 
@@ -46,6 +47,19 @@ const Table = (props) => {
       setSelectedRecordId(e.data.id)
       setShowRecordDetails(true)
     }
+
+    const recordDetailsModalStyle={
+      position: "fixed", 
+      top: '50%',
+      left: '50%',
+      height: "80vh", 
+      width: "80vw", 
+      translate: "-50% -50%",
+      zIndex: 999,
+      cursor: "grab",
+       overflowY:"auto", 
+       overflowX: "hidden"
+    }
   
   return (
       <div className="ag-theme-quartz animate__animated animate__fadeIn animate__duration-0.5s" style={{fontSize:"12px", height: "100%", width: "100%" }}>
@@ -56,8 +70,10 @@ const Table = (props) => {
         />
         {
           showRecordDetails && 
+          <Draggable>
           <div 
-            className="d-flex flex-column bg-light p-3" style={{position: "absolute", top: 60, right: 0, height: "100%", width: "100%", overflowY:"auto", overflowX: "hidden", zIndex: 100}}>
+            className="d-flex flex-column bg-light p-3 border border-3 shadow" 
+            style={recordDetailsModalStyle}>
               <RecordDetails
                 tableName={tableName}
                 recordId={recordId}
@@ -67,8 +83,10 @@ const Table = (props) => {
                 appData = {appData}
                 setShowRecordDetails = {setShowRecordDetails}
                 refreshTable = {setTableData}
+                updateParentStates = {[getTableData]}
               />
           </div>
+          </Draggable>
         }          
     </div>
   )

@@ -49,11 +49,6 @@ const DataEntryForm = (props) => {
       getFormFields();
     },[])
 
-    // useEffect(()=>{
-    //   calculateForm(formElements, formData)
-    // },[])
-
-    
 
     const getUserData = async()=>{
       const params = {
@@ -62,7 +57,7 @@ const DataEntryForm = (props) => {
         idField: "id",
       }
       const user = await getRecord(params)
-      console.log(user)
+      // console.log(user)
       setUser(user)
     }
 
@@ -108,7 +103,7 @@ const DataEntryForm = (props) => {
         };
     
         const formData = await getRecord(params);
-        console.log(formData);
+        // console.log(formData);
         setInitialFormData(formData);
         setFormData(formData);
         calculateForm(updatedFormFields, formData);
@@ -120,12 +115,12 @@ const DataEntryForm = (props) => {
     
     const calculateForm = async (formFields, updatedFormData) => {
       let formData = updatedFormData;
-      console.log(formData);
+      // console.log(formData);
   
   
       formFields.map(async (item) => {
         
-        console.log(item)
+        // console.log(item)
         let value = formData[item.ui_id];
   
         try {
@@ -141,7 +136,7 @@ const DataEntryForm = (props) => {
            value = await getValue(tableName,fieldName,conditionalField,conditionalValue)
           }
           updatedFormData = { ...updatedFormData, ...{ [item.ui_id]: value } };
-          console.log({...formData, ...updatedFormData})
+          // console.log({...formData, ...updatedFormData})
           setFormData((prevState) => ({ ...prevState, ...updatedFormData }));
           updateParent((prevState) => ({ ...prevState, ...updatedFormData }));
           setInitialValues(true);
@@ -266,8 +261,8 @@ const DataEntryForm = (props) => {
           recordToSendToDb = formDataWithAttachments
           updatesToSendToDb = updatedDataWithAttachments
         }
-        console.log(recordToSendToDb)
-        console.log(updatesToSendToDb)
+        // console.log(recordToSendToDb)
+        // console.log(updatesToSendToDb)
         
         // Stringify all fields that hold arrays or javascript objects to flatting the data
         Object.keys(recordToSendToDb).map(key=>{
@@ -275,7 +270,7 @@ const DataEntryForm = (props) => {
             recordToSendToDb = {...recordToSendToDb, ...{[key]:JSON.stringify(recordToSendToDb[key])}}
           }
         })
-        console.log(recordToSendToDb)
+        // console.log(recordToSendToDb)
      
         //update database table with updated record data
           const params = {
@@ -285,7 +280,7 @@ const DataEntryForm = (props) => {
               formData: recordToSendToDb
           }
           const updatedRecordFromDb= await updateRecord(params)
-          console.log(updatedRecordFromDb)
+          // console.log(updatedRecordFromDb)
           let match = true
           if(updatedRecordFromDb.id!==recordToSendToDb.id){
             match=false
@@ -311,11 +306,13 @@ const DataEntryForm = (props) => {
               getFormData(formElements)
 
               // Update activity log
-              updateActivityLog("orders", recordId, appData.user.email, JSON.stringify(updatesToSendToDb))
+              updateActivityLog(tableName, recordId, appData.user.email, JSON.stringify(updatesToSendToDb))
 
               //Refresh UI in Parent object
+              console.log("udpating parent states")
+              console.log(updateParentStates.length)
               updateParentStates.forEach(func=>{
-                console.log("Updating parent states");
+                console.log(func);
                 func();
               })
               
@@ -440,7 +437,7 @@ return(
                       allowAddData = {item.ui_allow_add_data}       
                     />
                     </div>
-                  : item.ui_form_section === section.name && item.ui_component_visible && item.ui_input_type=="file"?
+                  : item.ui_form_section === section.name && item.ui_component_visible && item.ui_input_type=="file" && initialFormData.attachments !=null?
                   <div key={index} className="d-flex flex-column mb-3">
                     <Attachments 
                       id={{id: item.ui_id, section: item.ui_form_section}} 
@@ -454,7 +451,7 @@ return(
                       disabled = {eval(item.ui_disabled) || !allowEdit}
                     />
                     </div>
-                    : item.ui_form_section === section.name && item.ui_component_visible && item.ui_component_type=="table"?
+                    : item.ui_form_section === section.name && item.ui_component_visible && item.ui_component_type=="table" && initialFormData[item.ui_id] !=null?
                     <div key={index} className="d-flex flex-column mb-3">
                       <TableInput
                         id={{id: item.ui_id, section: item.ui_form_section}} 

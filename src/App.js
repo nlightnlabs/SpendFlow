@@ -6,6 +6,10 @@ import 'animate.css';
 import {appIcons} from './components/apis/icons.js'
 
 import Home from './components/Home.js';
+import Login from './components/Login.js';
+import UserInfo from './components/UserInfo.js';
+import ForgotPassword from './components/ForgotPassword.js';
+import Settings from './components/Settings.js';
 import PurchaseRequest from './components/PurchaseRequest.js';
 import SoftwareAccess from './components/SoftwareAccess.js'
 import ITEquipment from './components/ITEquipment.js';
@@ -20,10 +24,6 @@ import AdditionalInfo from './components/Additionalnfo.js';
 import RequestSummary from './components/RequestSummary.js';
 import AddBusiness from './components/AddBusiness.js';
 import AddProduct from './components/AddProduct.js';
-import Login from './components/Login.js';
-import UserInfo from './components/UserInfo.js';
-import ForgotPassword from './components/ForgotPassword.js';
-import ResetPassword from './components/ResetPassword.js';
 import Header from './components/Header.js';
 import Requests from './components/Requests.js';
 import GenAIStudio from './components/GenAIStudio.js';
@@ -68,9 +68,9 @@ function App() {
   let pageData=[
     {name: "Home", component: <Home/>, data: "request_summary", request_type: false, description: "Description for this request", icon:`${appIcons}/home_icon.png`},
     {name: "Log In", component: <Login/>, data: "user_info", request_type: false, description: "Login page", icon:`${appIcons}/log_in_icon.png`},
-    {name: "User Info", component: <UserInfo/>, data: "user_info", request_type: false, description: "User profile", icon:`${appIcons}/sign_up_icon.png`},
+    {name: "User Info", component: <UserInfo/>, data: "user_info", request_type: false, description: "User profile", icon:`${appIcons}/profile_icon.png`},
     {name: "Forgot Password", component: <ForgotPassword/>, data: "email", request_type: false, description: "Forgot Password page", icon:`${appIcons}/sign_up_icon.png`},
-    {name: "Reset Password", component: <ResetPassword/>, data: "user_info", request_type: false, description: "Password reset page", icon:`${appIcons}/sign_up_icon.png`},
+    {name: "Settings", component: <Settings/>, data: "settings", request_type: false, description: "Administrative settings", icon:`${appIcons}/settings_icon.png`},
     {name: "Purchase Request", component: <PurchaseRequest/>, data: "request_details", request_type: true, description: "Purchase a good or service you need", icon:`${appIcons}/purchase_request_icon.png`},
     {name: "Software Access", component: <SoftwareAccess/>, data: "request_details", request_type: true, description: "Get access to software applications", icon:`${appIcons}/software_access_icon.png`},
     {name: "IT Equipment", component: <ITEquipment/>, data: "request_details", request_type: true, description: "Get access to common IT supplies like laptops, monitors, peripherals, etc.", icon:`${appIcons}/it_equipment_icon.png`},
@@ -116,7 +116,6 @@ function App() {
     console.log(Context)
     getPageData()
     setRequestTypes(getRequestTypes()) 
-    // setUser(localStorage.getItem('user'));
   },[])
  
 
@@ -128,7 +127,6 @@ function App() {
     overflow: "hidden"
   }
 
-  
 
 
   return (

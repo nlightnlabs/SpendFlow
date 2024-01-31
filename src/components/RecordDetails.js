@@ -4,6 +4,7 @@ import DataEntryFrom from './DataEntryForm.js'
 import Activities from './Activities'
 import { generalIcons } from './apis/icons'
 import {deleteRecord, getRecord, getRecords, getData, getTable, updateRecord} from './apis/axios.js'
+import Draggable from 'react-draggable'
 import "bootstrap/dist/css/bootstrap.min.css"
 
 
@@ -14,7 +15,7 @@ const RecordDetails = (props) => {
     const recordId = props.recordId || ""
     const userData = props.userData ||[]
     const tableData = props.tableData || []
-    const refreshTable = props.refreshTable
+    const updateParentStates = props.updateParentStates
 
     const setShowRecordDetails = props.setShowRecordDetails
     const [recordData, setRecordData] = useState([])
@@ -44,6 +45,18 @@ const RecordDetails = (props) => {
           }));
       }
 
+      const sortActivities = (data, direction)=>{
+        if(direction=="descending"){
+          setActivities(data.sort((a, b) => {
+            return  b.record_created-a.record_created;
+          }));
+        }else if(direction=="ascending"){
+          setActivities(data.sort((a, b) => {
+            return  b.record_created-a.record_created;
+          }));
+        }
+      }
+
       const iconButtonStyle={
         maxHeight: 30,
         maxWidth: 30,
@@ -64,7 +77,7 @@ const RecordDetails = (props) => {
       },[props])
 
   return (
-    <div className="flex flex-column" style={{height: "100%", overflow: "hidden"}}>
+    <div className="flex flex-column" style={{height: "100%", width:"100%", overflow: "hidden"}}>
         <div className="d-flex justify-content-end rounded-3" style={{backgroundColor: "rgb(50,100,255"}}>
             <div className="button-group p-1">
                 <img src={`${generalIcons}/close_icon.png`} style={iconButtonStyle}  name="closeButton" onClick={(e)=>{setShowRecordDetails(false)}}></img>
@@ -85,7 +98,7 @@ const RecordDetails = (props) => {
                     userId={userData.id}
                     appData={{user: userData}}
                     updateParent = {setFormData}
-                    updateParentStates = {[getActivityData, getRecordData]}
+                    updateParentStates = {[getActivityData, getRecordData, updateParentStates[0]]}
                 />
              </div>
             

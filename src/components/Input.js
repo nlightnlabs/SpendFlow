@@ -101,7 +101,7 @@ const MultiInput = forwardRef((props, ref) => {
     outline: "none",
     width: width || "100%",
     border: border|| "1px solid rgb(235,235,235)",
-    get padding(){ if(padding){return padding}else{ return ;}}
+    get padding(){ if(padding){return padding}else{ return;}}
   }
 
   const textAreaStyle ={
@@ -117,7 +117,7 @@ const MultiInput = forwardRef((props, ref) => {
   }
 
   const labelStyle ={
-    fontSize: labelSize || inputStyle.fontSize,
+    fontSize: labelSize || inputStyle.fontSize-1,
     fontWeight: labelWeight || "normal",
     color: labelColor || "rgb(145, 145, 145)",
     backgroundColor: "rgba(145, 145, 145,0)",
@@ -163,7 +163,6 @@ const MultiInput = forwardRef((props, ref) => {
     setValue(selectedValue)
     setSelectedIndex(selectedIndex)
     setOptions(props.list)
-
     setDropDownDisplay("none")
     updateStates(selectedValue)
   }
@@ -208,17 +207,12 @@ const MultiInput = forwardRef((props, ref) => {
   const handleHover=(e)=>{
     if(e.type =="mouseleave"){
         setDropDownDisplay("none")
-    }
-  
+    }   
   }
 
+  
   const handleDoubleClick = ()=>{
     props.list && props.list>0 && setOptions(props.list)
-  }
-
-  const handleFocus = (element)=>{
-    props.list && props.list>0 && setOptions(props.list)
-    setDropDownDisplay("block")
   }
 
   const handleBlur=(e)=>{
@@ -233,7 +227,8 @@ const MultiInput = forwardRef((props, ref) => {
   }
 
   const handleInputChange=(inputText)=>{
-     
+      
+      console.log(inputText)
       setValue(inputText)
       
       if(props.list && props.list.length>0){
@@ -290,8 +285,8 @@ const MultiInput = forwardRef((props, ref) => {
       className="d-flex"
       style={containerstyle}
       onBlur={(e)=>handleBlur(e)}
+      onMouseOver={(e)=>handleHover(e)}
       onMouseLeave={(e)=>handleHover(e)}
-      onClick={(e)=>handleDropDownToggle(e)}
     >
           <div className={formClassList}>
           {type == "textarea" ?
@@ -301,10 +296,12 @@ const MultiInput = forwardRef((props, ref) => {
                 name={name}
                 style={textAreaStyle} 
                 ref = {inputRef}
+                onClick={(e)=>handleDropDownToggle(e)}
                 type={type}
                 value={value}
                 onChange={(e)=>handleInputChange(e.target.value)}
                 onBlur={(e)=>handleBlur(e.target.value)}
+                onDoubleClick={(e)=>handleDoubleClick(e.target.value)}
                 {...inputProps}
                 >
             </textarea>
@@ -316,11 +313,12 @@ const MultiInput = forwardRef((props, ref) => {
                 name={name}
                 style={textAreaStyle}
                 ref = {inputRef}
+                onClick={(e)=>handleDropDownToggle(e)}
                 type={type}
                 value={value}
-                placeholder={label}
                 onChange={(e)=>handleInputChange(e.target.value)}
                 onBlur={(e)=>handleBlur(e.target.value)}
+                onDoubleClick={(e)=>handleDoubleClick(e.target.value)}
                 {...inputProps}
                 >
             </input>
@@ -331,13 +329,12 @@ const MultiInput = forwardRef((props, ref) => {
                 name={name}
                 style={inputStyle}
                 ref = {inputRef}
+                onClick={(e)=>handleDropDownToggle(e)}
                 type={type}
-                placeholder={label}
                 value={type=="date"? formatDateInput(value):value}
                 onChange={(e)=>handleInputChange(e.target.value)}
                 onBlur={(e)=>handleBlur(e.target.value)}
                 onDoubleClick={(e)=>handleDoubleClick(e.target.value)}
-                onFocus={(e)=>handleFocus(e.target.value)}
                 {...inputProps}
                 >
             </input>

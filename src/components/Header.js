@@ -84,8 +84,8 @@ const Header = () => {
   const handleMenuOption=(elem)=>{
   
 
-    if(elem == "newRequestButton"){
-      let nextPage = "Home"
+    if(elem == "settingsButton"){
+      let nextPage = "Settings"
       setPageList([nextPage])
       setPage(pages.filter(x=>x.name===nextPage)[0])
       setPageName(nextPage)
@@ -193,7 +193,7 @@ const Header = () => {
         </div>
 
         <div className="d-flex flex-column flex-wrap mb-3 border-top-1">
-            <button id="newRequestButton" name="newRequestButton" className="btn btn-light text-secondary mb-1 text-sm p-1" onClick={(e)=>handleMenuOption(e.target.id)}>New Request</button>
+            <button id="settingsButton" name="settingsButton" className="btn btn-light text-secondary mb-1 text-sm p-1" onClick={(e)=>handleMenuOption(e.target.id)}>Settings</button>
             <button id ="updateButton" name="updateButton" className="btn btn-light text-secondary mb-1 text-sm p-1" onClick={(e)=>handleMenuOption(e.target.id)}>Update Profile</button>
             <button id="signOutButton" name="signOutButton" className="btn btn-light text-secondary mb-1 text-sm p-1" onClick={(e)=>handleMenuOption(e.target.id)}>Sign out</button>
         </div>

@@ -112,18 +112,20 @@ export const getValue = async (tableName,lookupField, conditionalField,condition
 //Create New Record
 export const addRecord = async (tableName, formData)=>{
 
+
     const params = {
         tableName: tableName,
         formData: formData
     }
+    console.log(params)
 
     try{
       const result = await dbUrl.post("/db/addRecord",{params})
-      //console.log(result)
+      console.log(result)
       const data = await result.data
       return (data)
     }catch(error){
-      //console.log(error)
+      console.log(error)
     }
 }
 
@@ -305,6 +307,18 @@ export const scanInvoice = async ({args})=>{
     // console.log(error)
   }
 }
+
+//Search database:
+export const search = async (searchTerms) => {
+
+  try {
+    const response = await axios.post('/search', { searchTerms });
+    console.log(response.data.result)
+    return (response.data.result)
+  } catch (error) {
+    console.error('Error searching:', error);
+  }
+};
 
 //Get list of all tables in database:
 const query= `SELECT table_name FROM information_schema.tables where table_schema = 'public';`

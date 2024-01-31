@@ -66,32 +66,6 @@ const StatusListBox = (props) => {
         padding: 2
     }
 
-    const containerStyle={
-        width: "100%",
-        height: "100%",
-        overflow: "hidden"
-    }
-
-    const headerStyle = {
-        display: "flex",
-        justifyContent: "space-between",
-        height: "50px"
-    }
-    
-    const headerButtonGroupStyle={
-        display: "flex",
-        justifyContent: "end"
-    }
-    
-    const listBoxStyle = {
-        display: "flex",
-        flexDirection: "column",
-        height: "450px",
-        overflowY: "auto",
-        overflowX: "hidden",
-        padding: "5px",
-        marginBottom: 20
-    }
     
     const listItemStyle = {
         display: "flex",
@@ -113,26 +87,6 @@ const StatusListBox = (props) => {
         fontSize: "12px"
     }
 
-    const filterWindowStyle={
-        display: fitlerWindowDisplay
-    }
-
-    const sortWindowStyle={
-        display: sortWindowDisplay
-    }
-
-
-    const handleFilter=()=>{
-
-    }
-
-    const handleSort=()=>{
-
-    }
-
-    const handleSubmit=()=>{
-        
-    }
 
     const handleClick=(e)=>{
         const id = e.target.id
@@ -150,20 +104,7 @@ const StatusListBox = (props) => {
     },[props])
 
   return (
-    <div style={containerStyle}>
-
-    {/* Header */}
-    {/* <div style={headerStyle}>
-        <h4 style={titleColor}>{title}</h4>
-        <div style={headerButtonGroupStyle}>
-            <img src={`${generalIcons}/filter_icon.png`} alt="filter" style={iconStyle} onClick={(e)=>handleFilter(e)}/>
-            <img src={`${generalIcons}/sort_icon.png`} alt="sort" style={iconStyle} onClick={(e)=>handleSort(e)}/>
-        </div>
-    </div> */}
-
-
-    {/* List Box */}
-    <div style={listBoxStyle}>
+    <div>
         {data.map((item,index)=>(
         <div key={index} id={item.id} style={{display: "flex", flexDirection: "column", width: "100%", cursor: "pointer"}} onClick={(e)=>handleClick(e)}>
             { listType == "action"?
@@ -193,13 +134,6 @@ const StatusListBox = (props) => {
             }
         </div>
         ))}
-    </div>
-
-
-
-    {/* Menus */}
-    <div style={filterWindowStyle}></div>
-    <div style={sortWindowStyle}></div>
     </div>
   )
 }

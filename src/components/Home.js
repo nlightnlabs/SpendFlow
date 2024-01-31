@@ -4,8 +4,10 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import 'animate.css';
 import { appIcons } from './apis/icons.js';
 import MultiInput from './MultiInput.js';
-import { getTable, getRecords } from './apis/axios.js';
+import { getTable, getRecords, search } from './apis/axios.js';
 import StatusListBox from './StatusListBox.js';
+import Draggable from 'react-draggable'
+import RequestIntakeHome from './RequestIntakeHome.js';
 
 
 const Home = (props) => {
@@ -51,6 +53,8 @@ const Home = (props) => {
   const [newsData, setNewsData] = useState([])
   const [requests, setRequests] = useState([])
   const [apps,setApps] = useState([])
+  const [searchTerms, setSearchTerms] = useState("")
+  const [requestPageName, setRequestPageName] = useState("")
 
   // const [currentImageNumber, setCurrentImageNumber] = useState(0);
   const [highlightedNews, setHighlightedNews] = useState({});
@@ -106,13 +110,14 @@ const Home = (props) => {
     {status: "Cancelled", color: "red"}
 ] 
 
-  
 
-  const handleSelect=(e)=>{
-    const seletectedRequest=e.target.id    
-    const nextPage = seletectedRequest
-    setPageName(nextPage)
-  }
+const handleSearch = async (e)=>{
+
+  const searchResults = search(searchTerms)
+
+}
+
+
 
   const goToCatalog =(e)=>{
     const nextPage = "Catalog"
@@ -244,6 +249,25 @@ const Home = (props) => {
       window.removeEventListener('resize', handleContainerResize);
     };
   }, [windowHeight, contentContainerRef]);
+
+ 
+
+
+  const pageStyle = `
+    .RequestIntakeModalStyle {
+      position: fixed, 
+      top: 50%,
+      left: 50%,
+      height: 80vh, 
+      width: 50vw,
+      transform: translate(-50%, -50%),
+      top: 30vh,
+      fontSize: 24px,
+      fontWeight: bold,
+      zIndex: 999,
+      cursor: grab,
+    }
+  `
   
 
 return(
@@ -262,12 +286,18 @@ return(
                 <div style={{fontSize: 14, color: "gray"}}>GenAI</div>
             </div>
 
+
             <MultiInput
                 valueSize={14}
                 valueColor="#5B9BD5"
                 label="Search"
                 border={"2px solid lightgray"}
+                onChange={(e)=>setSearchTerms(e.target.value)}
             />
+            <div className="d-flex me-3 flex-column" onClick={(e)=>gotToGenAI(e)}>
+                <img src={`${appIcons}/search_icon.png`} style={{...iconStyle,...{height:75}}} onClick={(e)=>handleSearch(e)}></img> 
+                <div style={{fontSize: 14, color: "gray"}}>Search</div>
+            </div>
         </div>}
     </div>
         
@@ -294,24 +324,30 @@ return(
       <div ref={contentContainerRef} className="d-flex justify-content-between" style={{width: "100%", height:contentContainerHeight, minHeight:"300px"}}>
         
          {/* Request Something Panel*/}
-        <div className="d-flex flex-column justify-content-around p-2 border border-1 rounded-3 bg-white shadow m-2" style={{height: "100%", width: "33%", minWidth:"300px", overflowY: "auto"}}>
+        <div className="d-flex flex-column justify-content-around p-2 border border-1 rounded-3 bg-white shadow m-2" 
+        style={{height: "100%", width: "33%", minWidth:"300px", overflowY: "auto"}}>
             <div style={sectionTitleStyle}>Request Something</div>
-            <div className="flex-fill bg-white flex-column overflow-y-scroll">
-            {requestTypes.map((item, index)=>(
-            <div key={index} id={item.name} className="d-flex border border-1 border-light shadow shadow-sm p-2 m-2" style={{cursor: "pointer", zIndex:7}} onClick={(e)=>handleSelect(e)}>
-                <img  id={item.name} src={item.icon || "other_request_icon.png"} alt={`${item.name} icon`} style={{maxHeight: 30, maxWidth: 30}}></img>
-                <div id={item.name} className="d-flex flex-column ps-3">
-                    <div id={item.name} style={{fontSize: 14, fontWeight: 'bold'}}>{item.name}</div>
-                    <div id={item.name}  style={{fontSize: 12, color: 'gray'}}>{item.description} </div>
-                </div>
-            </div>
-            ))}
+            <div style={{overflowY: "auto"}}>
+              <RequestIntakeHome
+                appData = {appData}
+                setSelectedApp = {setSelectedApp}
+                setTableName = {setTableName}
+                setPage = {setPage}
+                pageList = {pageList}
+                setPageList = {setPageList}
+                pages = {pages}
+                apps = {apps}
+                pageName={pageName}
+                setPageName={setPageName}
+              />
             </div>
         </div>
 
         {/* Request status panel */}
-        <div className="d-flex flex-column justify-content-around p-2 border border-1 rounded-3 bg-white shadow m-2" style={{height: "100%", width: "33%", minWidth:"300px", overflowY: "auto"}}>
+        <div className="d-flex flex-column justify-content-around p-2 border border-1 rounded-3 bg-white shadow m-2" 
+        style={{height: "100%", width: "33%", minWidth:"300px", overflowY: "auto"}}>
           <div style={sectionTitleStyle}>My Requests</div>
+          <div style={{overflowY: "auto"}}>
             <StatusListBox
                 title="My Requests"
                 data={requests}
@@ -321,6 +357,7 @@ return(
                 updateParentStates = {{setPageName, setPage, setPageList, setSelectedApp, pages, pageList}}
                 appData = {{user: appData.user_info}}
             />
+            </div>
         </div>
 
          {/* Work on Something Panel */}
@@ -341,6 +378,7 @@ return(
         </div>
         }
     </div>
+
 </div>
 )
 }
