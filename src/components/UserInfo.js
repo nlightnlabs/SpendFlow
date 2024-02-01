@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext, useRef} from 'react'
 import { Context } from "./Context.js"
-import {dbUrl} from './apis/axios.js'
+import {dbUrl, getTable} from './apis/axios.js'
 import "bootstrap/dist/css/bootstrap.min.css"
 import 'animate.css'
 
@@ -45,15 +45,14 @@ const UserInfo = () => {
 
   const [businessUnits, setBusinessUnits] = useState([])
 
-  let user_info = {...appData.user_info}
-
   const handleChange = (e)=>{
       let {name, value} = e.target
       if(name=="email"){
         value = value.toString().toLowerCase()
       }
 
-      user_info = {...appData[`${page.data}`],[name]:value}
+      let user_info = {...appData[`${page.data}`],[name]:value}
+      console.log({...appData,user_info})
       setAppData({...appData,user_info})
   }
 
@@ -91,7 +90,8 @@ const UserInfo = () => {
     
     e.preventDefault()
     const form = e.target
-
+    
+    console.log(e.nativeEvent.submitter.name)
     if(e.nativeEvent.submitter.name==="backButton"){
         setFormClassList("form-group")
         let pageListCopy = pageList
@@ -110,6 +110,9 @@ const UserInfo = () => {
       }
       
       else{
+
+        
+
         const addUser = async (req,res)=>{
 
           const columns = Object.keys(appData[`${page.data}`])
@@ -153,19 +156,27 @@ const UserInfo = () => {
 }
 
 const getBusinessUnits = async ()=>{
-    const response = await dbUrl.get("/db/table/business_units")
     
-    let businessUnitSet = new Set()
-      response.data.data.forEach(item=>{
-        businessUnitSet.add(item.name)
+    try{
+      const response = await getTable("business_units")
+      const businessUnitData = response.data
+      console.log(businessUnitData)
+
+      let businessUnitList = []
+      businessUnitData.map(item=>{
+        businessUnitList.push(item.name)
       })
-      let businessUnitList = [...businessUnitSet]
       setBusinessUnits(businessUnitList.sort())
+
+    }catch(error){
+      console.log(error)
+    }
+    
   }
 
   useEffect(()=>{
     console.log(appData)
-    console.log(pageList)
+    console.log(page)
     getBusinessUnits()
   },[])
 
@@ -184,9 +195,11 @@ const getBusinessUnits = async ()=>{
           <div className="d-flex flex-column bg-light border shadow shadow p-3 rounded-2 justify-content-center">
           
           <form ref={formRef} name='form' id="form" onSubmit={handleSubmit} className={formClassList} noValidate>
-            
-          <div className="form-floating mb-3">
-                <input id = "email" name= "email" tyoe="email" className="form-control form-control text-primary" onChange={handleChange} onBlur={handleBlur} placeholder="Email" required></input>
+          
+          <div  className="d-flex flex-column" style={{height: "500px", overflowY:"auto"}}>
+
+          <div className="form-floating mb-3 p-1">
+                <input id = "email" name= "email" type="email" className="form-control form-control text-primary" onChange={handleChange} onBlur={handleBlur} placeholder="Email" required></input>
                 <label htmlFor="email" className="form-label text-body-tertiary small">
                     Email
                     <span style={{color: "red"}}>*</span>
@@ -194,53 +207,58 @@ const getBusinessUnits = async ()=>{
                 <div className={emailErrorClassName} style={{fontSize: 12}}>{emailErrorMsg}</div>
             </div>
 
-            <div className="form-floating mb-3">
-              <input id = "pwd" name= "pwd" type ="password" className="form-control form-control text-primary" onChange={handleChange}  placeholder="Password" required></input>
-                <label htmlFor="pwd" className="form-label text-body-tertiary small">
-                    Password
-                    <span style={{color: "red"}}>*</span>
-                </label>
+            <div className="d-flex justify-content-between mb-3 p-1">
+              <div className="form-floating w-50 me-1">
+                <input id = "pwd" name= "pwd" type ="password" className="form-control form-control text-primary" onChange={handleChange}  placeholder="Password" required></input>
+                  <label htmlFor="pwd" className="form-label text-body-tertiary small">
+                      Password
+                      <span style={{color: "red"}}>*</span>
+                  </label>
+              </div>
+              <div className="form-floating w-50 ms-1">
+                  <input id = "confirm_pwd" name= "confirm_pwd" type ="password" className="form-control form-control text-primary" onBlur={handleBlur} placeholder="Password" required></input>
+                  <label htmlFor="confirm_pwd" className="form-label text-body-tertiary small">
+                      Confirm Password
+                      <span style={{color: "red"}}>*</span>
+                  </label>
+                <div className={pwdErrorClassName} style={{fontSize: 12}}>{pwdErrorMsg}</div>
+              </div>
             </div>
 
-            <div className="form-floating mb-3">
-                <input id = "confirm_pwd" name= "confirm_pwd" type ="password" className="form-control form-control text-primary" onBlur={handleBlur} placeholder="Password" required></input>
-                <label htmlFor="confirm_pwd" className="form-label text-body-tertiary small">
-                    Confirm Password
-                    <span style={{color: "red"}}>*</span>
-                </label>
-              <div className={pwdErrorClassName} style={{fontSize: 12}}>{pwdErrorMsg}</div>
+            <div className="d-flex justify-content-between mb-3 p-1">
+              
+              <div className="form-floating w-50 me-1">
+                  <input id = "first_name" name= "first_name" type="text" className="form-control text-primary" onChange={handleChange} placeholder="Username" required></input>
+                  <label htmlFor="first_name" className="form-label text-body-tertiary small">
+                      First Name
+                      <span style={{color: "red"}}>*</span>
+                  </label>
+              </div>
+
+              <div className="form-floating w-50 ms-1">
+                  <input id = "last_name" name= "last_name" type="text" className="form-control text-primary" onChange={handleChange} placeholder="Username" required></input>
+                  <label htmlFor="last_name" className="form-label text-body-tertiary small">
+                  Last Name
+                  <span style={{color: "red"}}>*</span>
+                  </label>
+              </div>
+
             </div>
 
-            <div className="form-floating mb-3">
-                <input id = "first_name" name= "first_name" tyoe="text" className="form-control form-control text-primary" onChange={handleChange} placeholder="Username" required></input>
-                <label htmlFor="first_name" className="form-label text-body-tertiary small">
-                    First Name
-                    <span style={{color: "red"}}>*</span>
-                </label>
-            </div>
-
-            <div className="form-floating mb-3">
-                <input id = "last_name" name= "last_name" tyoe="text" className="form-control form-control text-primary" onChange={handleChange} placeholder="Username" required></input>
-                <label htmlFor="last_name" className="form-label text-body-tertiary small">
-                Last Name
-                <span style={{color: "red"}}>*</span>
-                </label>
-            </div>
-
-            <div className="form-floating mb-3">
-                <input id = "company_name" name= "company_name" tyoe="text" className="form-control form-control text-primary" onChange={handleChange} placeholder="Company name" required></input>
+            <div className="form-floating mb-3 p-1">
+                <input id = "company_name" name= "company_name" type="text" className="form-control form-control text-primary" onChange={handleChange} placeholder="Company name" required></input>
                 <label htmlFor="company_name" className="form-label text-body-tertiary small">
                     Company Name
                 <span style={{color: "red"}}>*</span>
                 </label>
                 </div>
 
-            <div className="form-floating mb-3">
-              <input id = "job_title" name= "job_title" tyoe="text" className="form-control form-control text-primary" onChange={handleChange} placeholder="Job Title"></input>
+            <div className="form-floating mb-3 p-1">
+              <input id = "job_title" name= "job_title" type="text" className="form-control form-control text-primary" onChange={handleChange} placeholder="Job Title"></input>
               <label htmlFor="job_title" className="form-label text-body-tertiary small">Job Title</label>
             </div>
 
-            <div className="form-floating mb-3">
+            <div className="form-floating mb-3 p-1">
               <select 
                 id = "business_unit" 
                 name = "business_unit" 
@@ -255,16 +273,18 @@ const getBusinessUnits = async ()=>{
               </select>
               <label htmlFor="supplier" className="form-label text-body-tertiary">Business Unit</label>
             </div>
-            <div className="form-floating mb-3">
+            <div className="form-floating mb-3 p-1">
                 <input id = "mobile_phone" name= "mobile_phone" type="tel" className="form-control form-control text-primary" onChange={handleChange} placeholder="Mobile Phone"></input>
                 <label htmlFor="mobile_phone" className="form-label text-body-tertiary small">Mobile Phone</label>
+            </div>
+
             </div>
             
             <div className="d-flex flex-column justify-content-center">
               <div className="d-flex justify-content-center">
                 <div className="btn-group">
                   <button name= "backButton" className="btn btn-outline-secondary" data-bs-toggle="button">Back</button>
-                  <button name="signUp" className="btn btn-primary" data-bs-toggle="button" type="submit">Sign Up</button>
+                  <button name="signUpButton" className="btn btn-primary" data-bs-toggle="button" type="submit">Sign Up</button>
                 </div>
               </div>
             </div>

@@ -72,7 +72,7 @@ const Table = (props) => {
           showRecordDetails && 
           <Draggable>
           <div 
-            className="d-flex flex-column bg-light p-3 border border-3 shadow" 
+            className="d-flex flex-column bg-light border border-3 shadow rounded-3" 
             style={recordDetailsModalStyle}>
               <RecordDetails
                 tableName={tableName}

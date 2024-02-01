@@ -129,7 +129,7 @@ const TableInput = (props) => {
 
 
   const tableCellStyle = {
-    fontSize: valueSize || 14,
+    fontSize: valueSize || 12,
     padding: 2,
     color: valueColor || "black",
     // width: Number(`${Math.ceil(Math.ceil(1/(Object.keys(lineItems[0]).length)*100))}%`),
@@ -141,7 +141,7 @@ const TableInput = (props) => {
   }
 
   const headerCellStyle = {
-    fontSize: valueSize || 14,
+    fontSize: valueSize || 12,
     padding: 2,
     color: "black",
     width: Math.ceil(tableWidth/(Object.keys(lineItems[0]).length),150),
@@ -161,7 +161,7 @@ const TableInput = (props) => {
     <div className="d-flex flex-column mb-3">
         <table ref={tableRef} 
         className="table w-100 table-borderless" 
-        style={{fontSize: valueSize || 14}}>
+        style={{fontSize: valueSize || 12}}>
           <thead>
             <tr className="text-center">
             {Object.keys(lineItems[0]).map((field, col_index)=>(

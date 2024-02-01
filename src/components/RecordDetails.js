@@ -78,11 +78,12 @@ const RecordDetails = (props) => {
 
   return (
     <div className="flex flex-column" style={{height: "100%", width:"100%", overflow: "hidden"}}>
-        <div className="d-flex justify-content-end rounded-3" style={{backgroundColor: "rgb(50,100,255"}}>
+        <div className="d-flex justify-content-end" style={{backgroundColor: "rgb(50,100,255"}}>
             <div className="button-group p-1">
                 <img src={`${generalIcons}/close_icon.png`} style={iconButtonStyle}  name="closeButton" onClick={(e)=>{setShowRecordDetails(false)}}></img>
             </div>
         </div>
+        <div className="d-flex w-100 flex-column p-3">
         {/* <div className="row">
             <Workflow/>
         </div> */}
@@ -113,6 +114,7 @@ const RecordDetails = (props) => {
             </div>
         </div>
         </div>
+    </div>
   )
 }
 

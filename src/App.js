@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {baseURL} from './components/apis/axios.js';
 import {Context } from './components/Context';
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -34,6 +34,78 @@ import NewsArticle from './components/NewsArticle.js';
 
 function App() {
 
+   //Set up local states
+   const [purchaseReqs, setPurchaseReqs] = useState(null);
+
+   const useExternalScript = (src) => {
+       useEffect(() => {
+       const script = document.createElement('script');
+       script.src = src;
+       script.async = true;
+       document.body.appendChild(script);
+
+       setTimeout(() => {
+           initializeFreeAgentConnection();
+       }, 500);
+
+       return () => {
+               document.body.removeChild(script);
+           };
+           }, [src]);
+   };
+    //script to itnegrate FreeAgent library
+    useExternalScript('https://freeagentsoftware1.gitlab.io/apps/google-maps/js/lib.js');
+   
+   //INPUT FROM FREEAGENT Specifiy App to bring in
+   const PURCHASE_REQ_APP = 'custom_app_53';
+   const initializeFreeAgentConnection = () => {
+       const FAAppletClient = window.FAAppletClient;
+       
+       //Initialize the connection to the FreeAgent this step takes away the loading spinner
+       const FAClient = new FAAppletClient({
+           appletId: 'test-app-iframe',
+       });
+
+       //Bridget to access freeagent apps
+       FAClient.listEntityValues({
+           entity: PURCHASE_REQ_APP,
+           limit: 100,
+           fields: [
+               "request_date",
+               "request_date",
+           ]
+       }, (purchaseReqs) => {
+               console.log('initializeFreeAgentConnection Success!', purchaseReqs);
+           if (purchaseReqs) {
+               setPurchaseReqs(purchaseReqs);
+           }
+           });
+
+        //OUTPUT 
+       //Function to create a new record/entity in FA app
+       FAClient.createEntity({
+           entity:"requests",
+           field_values: {
+               request_type: "",
+               subject: "",
+               requester: "",
+           }
+       })
+
+       //Function to update or delete a record/entity in FA app
+       FAClient.updateEntity({
+           entity:"requests", // app name
+           id:"", //What record to update
+           field_values: {
+               request_type: "",
+               subject: "",
+               requester: "",
+               deleted: false //ONLY USE IF need to delete
+           }
+       })
+   };
+
+    
 
   const {
     user,
@@ -60,9 +132,6 @@ function App() {
     selectedApp,
     setSelectedApp
   } = useContext(Context)
-
-  
-
 
 
   let pageData=[

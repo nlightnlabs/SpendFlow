@@ -215,7 +215,7 @@ const handleSearch = async (e)=>{
   const handleContainerResize = () => {
     if (contentContainerRef.current) {
       const { top } = contentContainerRef.current.getBoundingClientRect();
-      setContentContainerHeight(windowHeight - top-50);
+      setContentContainerHeight(windowHeight - top);
     }
   };
 
@@ -325,7 +325,7 @@ return(
         
          {/* Request Something Panel*/}
         <div className="d-flex flex-column justify-content-around p-2 border border-1 rounded-3 bg-white shadow m-2" 
-        style={{height: "100%", width: "33%", minWidth:"300px", overflowY: "auto"}}>
+        style={{height: "95%", width: "33%", minWidth:"300px", overflowY: "auto"}}>
             <div style={sectionTitleStyle}>Request Something</div>
             <div style={{overflowY: "auto"}}>
               <RequestIntakeHome
@@ -345,7 +345,7 @@ return(
 
         {/* Request status panel */}
         <div className="d-flex flex-column justify-content-around p-2 border border-1 rounded-3 bg-white shadow m-2" 
-        style={{height: "100%", width: "33%", minWidth:"300px", overflowY: "auto"}}>
+        style={{height: "95%", width: "33%", minWidth:"300px", overflowY: "auto"}}>
           <div style={sectionTitleStyle}>My Requests</div>
           <div style={{overflowY: "auto"}}>
             <StatusListBox
@@ -361,7 +361,7 @@ return(
         </div>
 
          {/* Work on Something Panel */}
-        <div className="d-flex flex-column p-2 border border-1 rounded-3 bg-white shadow m-2" style={{height: "100%", width: "33%",minWidth:"300px", overflowY: "auto"}}>
+        <div className="d-flex flex-column p-2 border border-1 rounded-3 bg-white shadow m-2" style={{height: "95%", width: "33%",minWidth:"300px", overflowY: "auto"}}>
             <div style={sectionTitleStyle}>Work on Something</div>
             <div className="d-flex justify-content-center flex-wrap">
             {

@@ -102,7 +102,7 @@ const waitingModalStyle={
   position: "fixed", 
   top: '50%',
   left: '50%',
-  transform: 'translate(-50%, -50%)',
+  translate: "-50% -50%",
   height: "300px", 
   width: "25%vw", 
   top: "30vh",

@@ -25,10 +25,11 @@ export const getData = async (query, res)=>{
 
 
 //Get Table
-export const getTable = async (tableName, res)=>{
+export const getTable = async (tableName)=>{
+  
     try{
       const result = await dbUrl.get(`/db/table/${tableName}`)
-      // console.log(result.data)
+      console.log(result.data)
       const {data,dataTypes} = await result.data
       return ({data,dataTypes})
     }catch(error){
@@ -168,6 +169,8 @@ export const deleteRecord = async (req, res)=>{
   }
 }
 
+
+//Filter Data
 export const runFilter = async(tableName, filterList)=>{
   const params={
     tableName: tableName,

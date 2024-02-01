@@ -8,6 +8,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import GenAIScanInvoice from './GenAIScanInvoice.js'
 import GenAICreateContract from './GenAICreateContract.js'
 import GenAICreateSalesPitch from './GenAICreateSalesPitch.js';
+import GenAIAnalyzeSpend from './GenAIAnalyzeSpend.js'
+import ImageConvert from './ImageConvert.js'
 
 
 const Gpt = (props) => {
@@ -57,6 +59,7 @@ const Gpt = (props) => {
                 <button id="analyzeSpendButton" className="btn btn-outline-success mb-3" style={menuButtonStyle} onClick={(e)=>setTaskType("Analyze Spend")}>Analyze Spend</button>
                 <button id="prepareBudgetButton" className="btn btn-outline-success mb-3" style={menuButtonStyle} onClick={(e)=>setTaskType("Prepare Budget")}>Prepare Budget</button>
                 <button id="prepareSourcingEventButton" className="btn btn-outline-success mb-3" style={menuButtonStyle} onClick={(e)=>setTaskType("Prepare Sourcing Event")}>Prepare Sourcing Event</button>
+                <button id="convertImageButton" className="btn btn-outline-success mb-3" style={menuButtonStyle} onClick={(e)=>setTaskType("Convert Image")}>Convert Image</button>
             </div>
             
             <div className="d-flex w-100 flex-column">
@@ -92,6 +95,18 @@ const Gpt = (props) => {
                         appData={appData}
                     />  
                 :
+                taskType == "Analyze Spend"?
+                    <GenAIAnalyzeSpend 
+                        user={appData.user_info}
+                        appData={appData}
+                    />  
+                :
+                taskType == "Image Convert"?
+                <GenAIAnalyzeSpend 
+                    user={appData.user_info}
+                    appData={appData}
+                />  
+            :
                     <div>Comming soon</div>
                 }
                 </div>
